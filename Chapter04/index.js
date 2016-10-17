@@ -1,5 +1,5 @@
 var WebSocketServer = require('ws').Server,
-    wss = new WebSocketServer({ port: 8888 }),
+    wss = new WebSocketServer({ port: 8081 }),
     users = {};
 
 wss.on('connection', function (connection) {

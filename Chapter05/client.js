@@ -1,4 +1,4 @@
-var connection = new WebSocket('ws://localhost:8888'),
+var connection = new WebSocket('ws://webrtcdemo-lubin.c9users.io:8081'),
     name = "";
 
 var loginPage = document.querySelector('#login-page'),

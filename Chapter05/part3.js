@@ -1,7 +1,10 @@
 var name,
     connectedUser;
 
-var connection = new WebSocket('wss://webrtcdemo-lubin.c9users.io:8081');
+var  hostname = window.location.hostname;
+var wssurl = 'wss://' + hostname + ":8081";
+console.log("connect to ", wssurl);
+var connection = new WebSocket(wssurl);
 
 connection.onopen = function () {
   console.log("Connected");

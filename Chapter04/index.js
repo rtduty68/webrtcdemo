@@ -1,5 +1,6 @@
+console.log(process.env.IP);
 var WebSocketServer = require('ws').Server,
-    wss = new WebSocketServer({ host:"127.0.0.1", port: 8081 }),
+    wss = new WebSocketServer({ host:process.env.IP, port: 8081 }),
     users = {};
 
 wss.on('connection', function (connection) {

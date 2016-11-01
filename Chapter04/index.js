@@ -15,6 +15,9 @@ wss.on('connection', function (connection) {
     }
 
     switch (data.type) {
+      case "keepAliveReq":
+        console.log("receive keepAliveReq myName ", data.myName, "other name ", data.name);
+        break;
       case "login":
         console.log("User logged in as", data.name);
         if (users[data.name]) {
@@ -72,7 +75,7 @@ wss.on('connection', function (connection) {
 
         break;
       case "leave":
-        console.log("Disconnecting user from", data.name);
+        console.log("recv leave from ", data.myName, "other party is ", data.name);
         var conn = users[data.name];
         conn.otherName = null;
 
@@ -94,13 +97,14 @@ wss.on('connection', function (connection) {
   });
 
   connection.on('close', function () {
+    console.log("recv close from ", connection.name, " other user ", connection.otherName);
     if (connection.name) {
       delete users[connection.name];
 
       if (connection.otherName) {
-        console.log("Disconnecting user from", connection.otherName);
         var conn = users[connection.otherName];
-        conn.otherName = null;
+        if(conn.otherName !==undefined)
+             conn.otherName = null;
 
         if (conn != null) {
           sendTo(conn, {

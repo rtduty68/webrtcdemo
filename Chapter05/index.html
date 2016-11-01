@@ -50,12 +50,18 @@
     <div id="call-page" class="page">
       <video id="yours" autoplay></video>
       <video id="theirs" autoplay></video>
+      <audio id="localmedial" controls>local meidia</audio>
+      <audio id="remotemedial" controls>remote medial</audio>
       <input type="text" id="their-username" />
       <button id="call">Call</button>
       <button id="hang-up">Hang Up</button>
+      <button id="start-record">start record</button>
+      <button id="stop-record">stop record</button>
+      <button id="play-both">play both</button>
     </div>
 
     <!--<script src="client.js"></script>-->
-    <script src="part3.js"></script>
+    <script src="./node_modules/msr/MediaStreamRecorder.js"> </script>
+    <script src="client.js"></script>
   </body>
 </html>

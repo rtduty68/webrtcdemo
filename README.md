@@ -3,7 +3,12 @@ run on c9
 2) node index.js
 
 run on c9 of meteor
+
 meteor run -p 172.17.28.222:8080
+测试运行, 要先停止常的运行
+meteor test --driver-package practicalmeteor:mocha -p 8080
+https://webrtcdemo-lubin.c9users.io/
+查看测试结果
 accessby
 https://webrtcdemo-lubin.c9users.io/
 

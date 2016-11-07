@@ -1,13 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
- 
-export const Tasks = new Mongo.Collection('tasks');
 
+export const Tasks = new Mongo.Collection('tasks');
+export const Testdata = new Mongo.Collection('testdata');
 if (Meteor.isServer) {
   // This code only runs on the server
   // Only publish tasks that are public or belong to the current user
   Meteor.publish('tasks', function tasksPublication() {
+      this.onStop(function(){console.log("sub stopped");})
       return Tasks.find({
       $or: [
         { private: { $ne: true } },
@@ -15,13 +16,26 @@ if (Meteor.isServer) {
       ],
     });
   });
+  
+   // Meteor.publish('testdata', function tasksPublication() {
+  //    this.onStop(function(){console.log("testdata sub stopped");})
+  //    return Tasks.find({});
+  //});
 }
 
 Meteor.methods({
+  'testdata.insert'(data1)
+  {
+    console.log("testdada insert");
+    Testdata.insert({
+      data1
+    });
+  },
+      
   'tasks.insert'(text) {
     check(text, String);
  
-    // Make sure the user is logged in before inserting a task
+     //Make sure the user is logged in before inserting a task
     if (! this.userId) {
       throw new Meteor.Error('not-authorized');
     }

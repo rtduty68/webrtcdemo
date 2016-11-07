@@ -4,17 +4,30 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import { Tasks } from '../../api/tasks.js';
+import { Testdata } from '../../api/tasks.js';
 
 import Task from './Task.jsx';
 import AccountsUIWrapper from './AccountsUIWrapper.jsx';
 // App component - represents the whole app
 class App extends Component {
+  
+  testfunc()
+  {
+    console.log("test111"); 
+    //Meteor.call('testdata.insert', "hello");
+  }
+  
+
+  
   constructor(props) {
     super(props);
 
     this.state = {
       hideCompleted: false,
     };
+    
+    this.myStream = null;
+   
   }
 
   handleSubmit(event) {
@@ -55,10 +68,16 @@ class App extends Component {
   }
 
   render() {
+    console.log("render todopage");
     return (
       <div className="container">
+        <p> <a href="/">return home</a> </p>
         <header>
           <h1>Todo List ({this.props.incompleteCount})</h1>
+          
+           <button onClick={this.testfunc}>
+            { 'test' }
+          </button>
 
           <label className="hide-completed">
             <input
@@ -95,11 +114,17 @@ App.propTypes = {
   currentUser: PropTypes.object,
 };
 
+
+
 export default createContainer(() => {
   Meteor.subscribe('tasks');
+  //Meteor.subscribe('testdata');
+  testdata : Testdata.find({}, { sort: { createdAt: -1 } }).fetch()
+  console.log("app refresh data");
   return {
     tasks: Tasks.find({}, { sort: { createdAt: -1 } }).fetch(),
     incompleteCount: Tasks.find({ checked: { $ne: true } }).count(),
     currentUser: Meteor.user(),
+    
   };
 }, App);

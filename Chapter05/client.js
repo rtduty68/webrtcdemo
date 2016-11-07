@@ -56,7 +56,7 @@ connection.onmessage = function (message) {
 
   switch(data.type) {
     case "login":
-      onLogin(data.success);
+      onLogin(data.success);onLeave
       break;
     case "offer":
       onOffer(data.offer, data.name);

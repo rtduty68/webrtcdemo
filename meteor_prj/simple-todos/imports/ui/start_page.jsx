@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 // App component - represents the whole app
 export default class StartPage extends Component {
   render() {
+    console.log("render startpage");
+    
     return (
       <div className="container">
         <header>

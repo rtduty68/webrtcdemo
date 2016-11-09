@@ -8,6 +8,7 @@ if (Meteor.isServer) {
   // This code only runs on the server
   // Only publish tasks that are public or belong to the current user
   Meteor.publish('tasks', function tasksPublication() {
+      console.log("task publish function called");
       this.onStop(function(){console.log("sub stopped");})
       return Tasks.find({
       $or: [
@@ -17,21 +18,57 @@ if (Meteor.isServer) {
     });
   });
   
-   // Meteor.publish('testdata', function tasksPublication() {
-  //    this.onStop(function(){console.log("testdata sub stopped");})
-  //    return Tasks.find({});
-  //});
+    Meteor.publish('testdata', function tasksPublication2() {
+       console.log("testdata publish function called");
+     this.onStop(function(){console.log("testdata sub stopped");})
+      return Testdata.find({});
+  });
 }
+Tasks.allow({
+  insert: function() {
+    return true;
+  },
+  update: function () {
+    // can only change your own documents
+    return true;
+  },
+  remove: function () {
+    // can only remove your own documents
+    return true;
+  },
+
+});
+console.log("Meteor.methods called");
 
 Meteor.methods({
   'testdata.insert'(data1)
   {
-    console.log("testdada insert");
-    Testdata.insert({
-      data1
-    });
-  },
+    
+    if(Meteor.isClient)
+    {
+      console.log("isclient");
+      console.log("testdada insert");
+      Testdata.insert({data1});
+      return;
+    }
+    else
+    {
+      console.log("isserver");
+      console.log("testdada insert");
+      Testdata.insert({username: "server"});
+      return;
+    }
       
+
+  },
+  
+  'testdata.clear'()
+  {
+    
+    console.log("testdada clear");
+    Testdata.remove({});
+  },
+  
   'tasks.insert'(text) {
     check(text, String);
  
@@ -42,13 +79,15 @@ Meteor.methods({
     
     //console.log("check user pass of userid" + JSON.stringify(Meteor.user()),this.userId);
     
-    Tasks.insert({
+    var id = Tasks.insert({
       text,
       createdAt: new Date(),
       owner: this.userId,
       username: Meteor.users.findOne(this.userId).username,
       private: true
     });
+    
+    console.log("task insert id : " + id);
   },
   'tasks.remove'(taskId) {
     check(taskId, String);

@@ -14,7 +14,10 @@ class App extends Component {
   testfunc()
   {
     console.log("test111"); 
-    //Meteor.call('testdata.insert', "hello");
+    Meteor.call('testdata.insert', "hello");
+    console.log(Testdata.find({}, { sort: { createdAt: -1 } }).fetch());
+    //Meteor.call('testdata.clear');
+    //console.log(Testdata.find({}, { sort: { createdAt: -1 } }).fetch());
   }
   
 
@@ -112,19 +115,19 @@ App.propTypes = {
   tasks: PropTypes.array.isRequired,
   incompleteCount: PropTypes.number.isRequired,
   currentUser: PropTypes.object,
+  testdata: PropTypes.array.isRequired,
 };
 
 
 
 export default createContainer(() => {
-  Meteor.subscribe('tasks');
-  //Meteor.subscribe('testdata');
-  testdata : Testdata.find({}, { sort: { createdAt: -1 } }).fetch()
+
+  
   console.log("app refresh data");
   return {
     tasks: Tasks.find({}, { sort: { createdAt: -1 } }).fetch(),
     incompleteCount: Tasks.find({ checked: { $ne: true } }).count(),
     currentUser: Meteor.user(),
-    
+    testdata : Testdata.find({}, { sort: { createdAt: -1 } }).fetch()
   };
 }, App);

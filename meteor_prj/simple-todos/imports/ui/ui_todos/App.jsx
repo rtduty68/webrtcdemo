@@ -23,6 +23,7 @@ class App extends Component {
 
   
   constructor(props) {
+     console.log("App constructor");
     super(props);
 
     this.state = {
@@ -30,9 +31,25 @@ class App extends Component {
     };
     
     this.myStream = null;
+    
+    this.subHandleTasks = null;
+    this.subHandleTestData = null;
    
   }
 
+  componentWillUnmount()
+  {
+    console.log("App componentWillUnmount");
+    this.subHandleTasks.stop();
+    this.subHandleTestData.stop();
+  }
+  
+  componentDidMount() {
+    console.log("App componentDidMount");
+      this.subHandleTasks = Meteor.subscribe('tasks');
+      this.subHandleTestData = Meteor.subscribe('testdata');
+  }
+  
   handleSubmit(event) {
     event.preventDefault();
 

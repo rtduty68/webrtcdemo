@@ -296,7 +296,7 @@ function setupPeerConnection(stream) {
       });
     }
   };
-};
+}
 
 function startPeerConnection(user) {
   connectedUser = user;
@@ -311,4 +311,4 @@ function startPeerConnection(user) {
   }, function (error) {
     alert("An error has occurred.");
   });
-};
+}

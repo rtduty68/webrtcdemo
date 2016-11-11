@@ -10,7 +10,7 @@ function hasRTCPeerConnection() {
   return !!window.RTCPeerConnection;
 };
 
-var yourConnection;
+var yourConnection = null;
 
 
 function setupPeerConnection(stream,onTheirStream) {
@@ -30,6 +30,11 @@ function setupPeerConnection(stream,onTheirStream) {
   
 export function foo2(){alert("call foo2");};
 
+export function reset()
+{
+   yourConnection = null;
+}
+
 export  function startConnection(onLocalStream, onTheirStream) {
    
    function getUserMediaSuccess(paramMyStream) {
@@ -44,12 +49,59 @@ export  function startConnection(onLocalStream, onTheirStream) {
   function getUserMediaError(error)
   {
     console.log(error);
+    onLocalStream(null);
   }
   
    if (hasUserMedia()) {
-      alert("OK, your browser does support WebRTC.");
+      console.log("OK, your browser does support WebRTC.");
       navigator.getUserMedia({ video: false, audio: true }, getUserMediaSuccess, getUserMediaError);
     } else {
     alert("Sorry, your browser does not support WebRTC.");
   }
 };
+
+export function startPeerConnection(onOfferCreate, onError) {
+  function onOfferCreate_(offer)
+  {
+      yourConnection.setLocalDescription(offer,
+                                         function(){console.log("setLocalDescription by offer success");},
+                                         function(){console.log("setLocalDescription by offer failed");}
+                                         );
+      onOfferCreate(JSON.stringify(offer));
+  }
+  
+  function onError_(error)
+  {
+     onError(error);
+  }
+  yourConnection.createOffer(onOfferCreate_ , onError_);
+}
+
+
+export function onOffer(offer, onAnswerCreate)
+{
+    var jobjOffer = JSON.parse(offer);
+    function oncreateAnswer(answer)
+    {
+       console.log("create anawer success");
+      yourConnection.setLocalDescription(answer,
+                                         function(){console.log("setLocalDescription by answer success");},
+                                         function(){console.log("setLocalDescription by answer failed");});
+      onAnswerCreate(JSON.stringify(answer));
+        //send({
+        //  type: "answer",
+        //  answer: answer
+        //});
+   }
+  
+  function oncreateOnswerErr(error)
+  {
+     console.log("oncreateOnswerErr An error has occurred" + error);
+     onAnswerCreate(null);
+  }
+  console.log("webrtc onOffer");
+  yourConnection.setRemoteDescription(new RTCSessionDescription(jobjOffer),
+                                       function(){console.log("setRemoteDescription by offer success");},
+                                      function(){console.log("setRemoteDescription by offer failed");});
+  yourConnection.createAnswer(oncreateAnswer, oncreateOnswerErr);
+}

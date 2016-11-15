@@ -38,7 +38,7 @@ Tasks.allow({
   },
 
 });
-console.log("Meteor.methods called");
+//console.log("Meteor.methods called");
 
 Meteor.methods({
   'testdata.insert'(data1)

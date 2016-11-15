@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 import StartPage from '../../ui/start_page.jsx';
 import Todos from '../../ui/ui_todos/App.jsx';
 import App2 from '../../ui/ui_app2/App2.jsx';
+import { mount } from 'react-mounter';
 
 
 FlowRouter.route( '/', {
@@ -19,8 +20,11 @@ FlowRouter.route( '/todos', {
   },
 });
 
+const WelcomeComponent = ({name}) => (<p>Hello, {name}</p>);
 FlowRouter.route( '/app2', {
   action: function() {
     render(<App2 />, document.getElementById('render-target'));
+    render(<App2 />, document.getElementById('render-target'));
+    //mount(WelcomeComponent, {name: {App2}});
   },
 });

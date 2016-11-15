@@ -7,11 +7,12 @@ export const ActiveCallEvents = new Mongo.Collection('activeCallEvents');
 
 export const CurrentTime = new Mongo.Collection('currentTime');
 
-export const callEventEnum = {offer:"offer",answer:"answer",candidate:"candidate"};
+export const callEventEnum = {offer:"offer",answer:"answer",candidate:"candidate", release:"release"};
 if (Meteor.isServer) {
-  Meteor.publish('activeCallEvents', function PubActiveCallEvents() {
+  Meteor.publish('activeCallEvents', function PubActiveCallEvents(paramPresentName) {
       this.onStop(function(){console.log("subActiveCallEvents stopped");})
-      return ActiveCallEvents.find({});
+      console.log(Meteor.users.findOne(this.userId).username + " publish " + paramPresentName);
+      return ActiveCallEvents.find({"event.presentName": {$eq: paramPresentName}});
   });
   
   Meteor.publish('currentTime', function PubCurrentTime() {

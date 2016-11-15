@@ -7,31 +7,37 @@ Meteor.methods({
   //method insesrt
   'activeCallEvents.insert'(event)
   {
-    console.log("activeCallEvents insert");
+    //console.log("activeCallEvents insert");
     function insertret(error, id)
     {
         if(error)
         {
-            console.log("insert failed : " + error);
+           console.log("insert failed : " + error);
         }
         else
         {
-            console.log("insert success : " + id);
+            //console.log("insert success : " + id);
+            if(event.type==callEventEnum.offer)
+            {/*
+                ActiveCallEvents.update(id, { $set: { sessionId: id } }, 
+                   function(uperr,upret)
+                   {
+                       if(uperr)
+                       {
+                           console.log("set session id failed :" + uperr);
+                       }
+                       else
+                       {
+                           //console.log(upret + "doc updated");
+                       }
+                   }
+                );*/
+            }
         }
     
     }
     
-    console.log(this.connection);
-    
-    if(this.connection.onClose)
-    {
-        console.log("onClose has a value"); 
-    }
-    else
-    {
-        console.log("onClose dont has a value"); 
-    }
-    
+
     ActiveCallEvents.insert({
                               event,
                               creater: this.userId,
@@ -43,7 +49,7 @@ Meteor.methods({
   //method
   'getCurrentTime'()
   {
-      console.log("get current time");
+      //console.log("get current time");
       return new Date();
   }
 })

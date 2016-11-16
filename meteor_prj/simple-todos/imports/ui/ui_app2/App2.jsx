@@ -7,6 +7,7 @@ import { Random } from 'meteor/random'
 import AccountsUIWrapper from '../AccountsUIWrapper.jsx';
 import { Tracker } from 'meteor/tracker'
 import { ReactiveVar } from 'meteor/reactive-var'
+import {testVar,app2StoreInst}  from './app2Store.js'
 
 // App component - represents the whole app
 class App2 extends Component {
@@ -14,7 +15,8 @@ class App2 extends Component {
      
    constructor(props) {
     super(props);
-    console.log("app2 construct");
+    console.log("app2 construct" + testVar);
+    app2StoreInst.say();
     this.sessionId=null;
     this.presentName=null;
     this.currentTime=null;
@@ -26,6 +28,7 @@ class App2 extends Component {
     };
   
     this.subHandleCalled = null;
+    
   }
   componentWillUnmount()
   {
@@ -429,12 +432,8 @@ Tracker.autorun(function () {
 export default app2Container = createContainer(() => {
   console.log("app refresh data");
   //console.log("CurrentTime.find({}).fetch() :" + JSON.stringify(CurrentTime.find({}).fetch()));
+  return app2StoreInst.getProps();
   
-  return {
-    callEvents: ActiveCallEvents.find({}, { sort: { createdAt: -1 } }).fetch(),
-    currentUserId: Meteor.userId(),
-    currentUser: Meteor.user(),
-  };
 }, App2);
 
 

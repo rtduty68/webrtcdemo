@@ -11,8 +11,16 @@ export const callEventEnum = {offer:"offer",answer:"answer",candidate:"candidate
 if (Meteor.isServer) {
   Meteor.publish('activeCallEvents', function PubActiveCallEvents(paramPresentName) {
       this.onStop(function(){console.log("subActiveCallEvents stopped");})
-      console.log(Meteor.users.findOne(this.userId).username + " publish " + paramPresentName);
-      return ActiveCallEvents.find({"event.presentName": {$eq: paramPresentName}});
+      console.log(this.userId +" publish " + paramPresentName);
+      //console.log(Meteor.users.findOne(this.userId).username + " publish " + paramPresentName);
+      if(this.userId)
+      {
+         return ActiveCallEvents.find({"event.presentName": {$eq: paramPresentName}});
+      }
+      else
+      {
+        return [];
+      }
   });
   
   Meteor.publish('currentTime', function PubCurrentTime() {

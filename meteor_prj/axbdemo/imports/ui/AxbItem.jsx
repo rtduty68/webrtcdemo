@@ -2,15 +2,28 @@ import React, { Component, PropTypes } from 'react';
  
 // Task component - represents a single todo item
 export default class AxbItem extends Component {
+  
+  deleteThisAxb() {
+    Meteor.call('axbs.remove', this.props.axbItem._id);
+  }
+  
   render() {
     return (
-      <li>{this.props.task.a}</li>
+      <div>
+      
+      <li className="list-group-item">
+      <button className="delete" onClick={this.deleteThisAxb.bind(this)}>
+          &times;
+      </button>
+      <span className="text">
+        a: {this.props.axbItem.a},x: {this.props.axbItem.x}, b: {this.props.axbItem.b}
+      </span>
+      </li>
+      </div>
     );
   }
 }
  
 AxbItem.propTypes = {
-  // This component gets the task to display through a React prop.
-  // We can use propTypes to indicate it is required
   axbItem: PropTypes.object.isRequired,
 };

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,PropTypes } from 'react';
  
 import AxbItem from './AxbItem.jsx';
 import {
@@ -6,20 +6,26 @@ import {
 }
 from 'meteor/react-meteor-data';
 
-import { Tasks } from '../api/db.js';
+import { Axbs } from '../api/db.js';
 // App component - represents the whole app
 class App extends Component {
-  getTasks() {
+  getAxbs() {
     return [
-      { _id: 1, a: 'This is task 1' },
-      { _id: 2, a: 'This is task 2' },
-      { _id: 3, a: 'This is task 3' },
+      { _id: 1, a: 'a number1', x:'x number 1', b:'b number 1'},
+      { _id: 2, a: 'a number2', x:'x number 1', b:'b number 1'},
+      { _id: 3, a: 'a number3', x:'x number 1', b:'b number 1'},
     ];
   }
  
-  renderTasks() {
-    return this.getTasks().map((task) => (
-      <AxbItem key={task._id} task={task} />
+  renderAxbs() {
+    return this.props.axbs.map((val) => (
+      <AxbItem key={val._id} axbItem={val} />
+    ));
+  }
+  
+   renderAxbs2() {
+    return this.getAxbs().map((val) => (
+      <AxbItem key={val._id} axbItem={val} />
     ));
   }
   
@@ -34,6 +40,11 @@ class App extends Component {
     
      $("#btn_ok_axb_input").click(function(){
                                            console.log("ok button");
+                                           var axb = {a: $("#input_a").val(),
+                                                      x: $("#input_x").val(),
+                                                      b: $("#input_b").val()
+                                           }
+                                          Meteor.call('axbs.insert', axb);
                                           }.bind(this)
     );
   
@@ -91,17 +102,24 @@ class App extends Component {
             <button id="btn_clear_axb_input" type="button" className="btn btn-default">清除</button>
             <button id="btn_ok_axb_input" type="button" className="btn btn-default">确定</button>
          </div>
+   
+        <ul className="list-group">
+        <br/> 
+          {this.renderAxbs()}
+        </ul>
          </div>
          
-        <ul>
-          {this.renderTasks()}
-        </ul>
+
     );
   }
 }
 
+App.propTypes = {
+  axbs: PropTypes.array.isRequired,
+};
 export default createContainer(() => {
   console.log("app refresh data");
   return {
+    axbs: Axbs.find({}, { sort: { createdAt: -1 } }).fetch(),
   };
 }, App);

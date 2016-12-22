@@ -90,12 +90,12 @@ class App extends Component {
          <br/>
          <div className="input-group">
             <span className="input-group-addon">x号码:</span>
-            <input id="input_x" type="text" className="form-control" placeholder="9501312345"/>
+            <input id="input_x" type="text" className="form-control" placeholder="862152530002"/>
         </div>
          <br/>
          <div className="input-group">
             <span className="input-group-addon">b号码:</span>
-            <input id="input_b" type="text" className="form-control" placeholder="862152531116"/>
+            <input id="input_b" type="text" className="form-control" placeholder="00862152531116"/>
          </div>
           <br/>
          <div className="btn-group">

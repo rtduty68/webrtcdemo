@@ -35,9 +35,15 @@ Meteor.methods({
     //console.log("check user pass of userid" + JSON.stringify(Meteor.user()),this.userId);
     
     text.createdAt = new Date();
-    var id = Axbs.insert({
-      ...text
-    });
+    var id = Axbs.upsert(
+      {a: text.a, x: text.x},
+      {$set:{...text}}
+    );
+    
+    //text.createdAt = new Date();
+    //var id = Axbs.insert({
+    //  ...text
+    //});
     
     console.log("axb insert id : " + id);
   },

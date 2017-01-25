@@ -7,6 +7,11 @@ import {
 from 'meteor/react-meteor-data';
 
 import { Axbs } from '../api/db.js';
+
+import { a_num_to_edit } from '../api/store.js'
+import { x_num_to_edit } from '../api/store.js'
+import { b_num_to_edit } from '../api/store.js'
+
 // App component - represents the whole app
 class App extends Component {
   getAxbs() {
@@ -29,6 +34,7 @@ class App extends Component {
     ));
   }
   
+
   componentDidMount() {
     $("#btn_clear_axb_input").click(function(){
                                            console.log("clear button");
@@ -39,7 +45,7 @@ class App extends Component {
     );
     
      $("#btn_ok_axb_input").click(function(){
-                                           console.log("ok button");
+                                           console.log("ok button " + $("#input_a").val());
                                            var axb = {a: $("#input_a").val(),
                                                       x: $("#input_x").val(),
                                                       b: $("#input_b").val()
@@ -47,11 +53,25 @@ class App extends Component {
                                           Meteor.call('axbs.insert', axb);
                                           }.bind(this)
     );
-  
   }
-  
+
+ handleInputChange_a(event)
+ {
+    a_num_to_edit.set(event.target.value);
+    console.log("ok change a" + a_num_to_edit.get());
+ }
  
+ handleInputChange_x(event)
+ {
+    x_num_to_edit.set(event.target.value);
+    console.log("ok change x" + x_num_to_edit.get());
+ }
  
+  handleInputChange_b(event)
+ {
+    b_num_to_edit.set(event.target.value);
+    console.log("ok change c" + b_num_to_edit.get());
+ }
   render() {
     console.log("reander");
     return (
@@ -82,20 +102,22 @@ class App extends Component {
           <h1>请输入axb</h1>
         </header>
         
-
          <div className="input-group">
           <span className="input-group-addon">a号码:</span>
-          <input id="input_a" type="text" className="form-control" placeholder="862152530001"/>
+          <input id="input_a" type="text"  className="form-control" placeholder="862152530001"  
+                  value={this.props.a_num_to_edit_} onChange={this.handleInputChange_a.bind(this)}/>
          </div>
          <br/>
          <div className="input-group">
             <span className="input-group-addon">x号码:</span>
-            <input id="input_x" type="text" className="form-control" placeholder="862152530002"/>
+            <input id="input_x" type="text" className="form-control" placeholder="862152530002"  
+            value={this.props.x_num_to_edit_} onChange={this.handleInputChange_x.bind(this)}/>
         </div>
          <br/>
          <div className="input-group">
             <span className="input-group-addon">b号码:</span>
-            <input id="input_b" type="text" className="form-control" placeholder="00862152531116"/>
+            <input id="input_b" type="text" className="form-control" placeholder="00862152531116"
+            value={this.props.b_num_to_edit_} onChange={this.handleInputChange_b.bind(this)}/>
          </div>
           <br/>
          <div className="btn-group">
@@ -116,10 +138,14 @@ class App extends Component {
 
 App.propTypes = {
   axbs: PropTypes.array.isRequired,
+   a_num_to_edit_ : PropTypes.string.isRequired
 };
 export default createContainer(() => {
   console.log("app refresh data");
   return {
     axbs: Axbs.find({}, { sort: { createdAt: -1 } }).fetch(),
+    a_num_to_edit_ : a_num_to_edit.get(),
+    x_num_to_edit_ : x_num_to_edit.get(),
+    b_num_to_edit_ : b_num_to_edit.get(),
   };
 }, App);
